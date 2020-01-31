@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "PicPay-Modules",
+        "repositoryURL": "git@github.com:PicPay/picpay-ios.git",
+        "state": {
+          "branch": "dev",
+          "revision": "3a2e4adb4c062c4530931b0f69f22450c64b2637",
+          "version": null
+        }
+      },
+      {
+        "package": "SkeletonView",
+        "repositoryURL": "https://github.com/Juanpe/SkeletonView.git",
+        "state": {
+          "branch": null,
+          "revision": "b431aabddb299950a8556e260505b4d6e5f84c2c",
+          "version": "1.8.3"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
