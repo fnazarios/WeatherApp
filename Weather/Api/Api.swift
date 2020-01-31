@@ -67,6 +67,8 @@ public final class Api {
                 }
             }
             
+            task.resume()
+            
             return Disposables.create {
                 task.cancel()
             }
