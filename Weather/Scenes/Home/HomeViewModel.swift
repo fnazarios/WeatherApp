@@ -5,18 +5,15 @@ import RxCocoa
 protocol HomeViewModelType {
     var searchCity: AnyObserver<String> { get }
 
-    var city: Driver<String> { get }
-    var temperature: Driver<String> { get }
+    var cities: Driver<[City]> { get }
 }
-
 
 final class HomeViewModel: HomeViewModelType {
     //Inputs
     var searchCity: AnyObserver<String>
     
     //Outputs
-    var city: Driver<String>
-    var temperature: Driver<String>
+    var cities: Driver<[City]>
     
     init(service: WeatherServicing) {
         let searchCityPublisher = PublishSubject<String>()
@@ -25,15 +22,10 @@ final class HomeViewModel: HomeViewModelType {
             .flatMap(service.search)
             .share()
         
-        city = response
-            .map(\.name)
-            .asDriver(onErrorJustReturn: "deu ruim")
-            
-        temperature = response
-            .map(\.main.temp.description)
-            .asDriver(onErrorJustReturn: "deu ruim")
+        cities = Observable.just([])
+//            .map(\.name)
+            .asDriver(onErrorJustReturn: [])
 
-        
         searchCity = AnyObserver(searchCityPublisher)
     }
 }

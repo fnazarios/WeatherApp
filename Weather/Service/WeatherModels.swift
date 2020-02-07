@@ -2,18 +2,23 @@ import Foundation
 
 // MARK: - WeatherData
 struct WeatherData: Codable {
-    let coord: Coord
-    let weather: [Weather]
-    let base: String
-    let main: Main
-    let visibility: Int
-    let wind: Wind
-    let clouds: Clouds
-    let dt: Int
-    let sys: Sys
-    let timezone, id: Int
+    let message, cod: String
+    let count: Int
+    let list: [City]
+}
+
+// MARK: - List
+struct City: Codable {
+    let id: Int
     let name: String
-    let cod: Int
+    let coord: Coord
+    let main: MainClass
+    let dt: Int
+    let wind: Wind
+    let sys: Sys
+    let rain, snow: JSONNull?
+    let clouds: Clouds
+    let weather: [Weather]
 }
 
 // MARK: - Clouds
@@ -23,11 +28,11 @@ struct Clouds: Codable {
 
 // MARK: - Coord
 struct Coord: Codable {
-    let lon, lat: Double
+    let lat, lon: Double
 }
 
-// MARK: - Main
-struct Main: Codable {
+// MARK: - MainClass
+struct MainClass: Codable {
     let temp, feelsLike, tempMin, tempMax: Double
     let pressure, humidity: Int
     
@@ -42,15 +47,19 @@ struct Main: Codable {
 
 // MARK: - Sys
 struct Sys: Codable {
-    let type, id: Int
-    let country: String
-    let sunrise, sunset: Int
+    let country: Country
+}
+
+enum Country: String, Codable {
+    case ru = "RU"
 }
 
 // MARK: - Weather
 struct Weather: Codable {
     let id: Int
-    let main, weatherDescription, icon: String
+    let main: MainEnum
+    let weatherDescription: Description
+    let icon: Icon
     
     enum CodingKeys: String, CodingKey {
         case id, main
@@ -59,8 +68,46 @@ struct Weather: Codable {
     }
 }
 
+enum Icon: String, Codable {
+    case the03N = "03n"
+}
+
+enum MainEnum: String, Codable {
+    case clouds = "Clouds"
+}
+
+enum Description: String, Codable {
+    case scatteredClouds = "scattered clouds"
+}
+
 // MARK: - Wind
 struct Wind: Codable {
-    let speed: Double
-    let deg: Int
+    let speed, deg: Int
+}
+
+// MARK: - Encode/decode helpers
+
+class JSONNull: Codable, Hashable {
+    
+    public static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
+        return true
+    }
+    
+    public var hashValue: Int {
+        return 0
+    }
+    
+    public init() {}
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if !container.decodeNil() {
+            throw DecodingError.typeMismatch(JSONNull.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for JSONNull"))
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encodeNil()
+    }
 }
