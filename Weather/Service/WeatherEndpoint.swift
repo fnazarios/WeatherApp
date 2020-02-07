@@ -18,14 +18,14 @@ extension WeatherEndpoint: ApiEndpointExposable {
     var path: String {
         switch self {
         case .search:
-            return "/find"
+            return "find"
         }
     }
     
     var parameters: [String : Any] {
         switch self {
         case .search(let params):
-            return ["lat": params.lat, "lon": params.lon, "cnt": params.cnt, "appid": "c7cea5a67a75c97651eed69251569b02"]
+            return ["lat": params.lat, "lon": params.lon, "cnt": params.cnt, "appid": "c7cea5a67a75c97651eed69251569b02", "units": "metric"]
         }
     }
 }

@@ -58,6 +58,7 @@ public final class Api {
                 switch status {
                 case .ok:
                     observer.onNext(data ?? Data())
+                    observer.onCompleted()
                 case .unauthorized:
                     observer.onError(ApiError.unauthorized)
                 case .badRequest:

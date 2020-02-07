@@ -7,6 +7,7 @@ final class HomeViewController: UIViewController {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.rowHeight = 50
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         return tableView
     }()
     
@@ -48,16 +49,14 @@ final class HomeViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        viewModel.city
-            .drive(onNext: { city in
-                print("city: \(city)")
-            })
+        searchBar.rx.text
+            .bind(to: viewModel.searchCity)
             .disposed(by: disposeBag)
-        
-        viewModel.temperature
-            .drive(onNext: { temperature in
-                print("temperature: \(temperature)")
-            })
+
+        viewModel.cities
+            .drive(tableView.rx.items(cellIdentifier: "Cell", cellType: UITableViewCell.self)) { row, city, cell in
+                cell.textLabel?.text = "\(city.name) \(city.main.temp)ºC"
+            }
             .disposed(by: disposeBag)
     }
 }

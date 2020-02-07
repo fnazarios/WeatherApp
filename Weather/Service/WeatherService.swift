@@ -2,7 +2,7 @@ import Foundation
 import RxSwift
 
 protocol WeatherServicing {
-    func search(_ city: String) -> Observable<WeatherData>
+    func search(_ params: SearchParams) -> Observable<WeatherData>
 }
 
 final class WeatherService: WeatherServicing {
