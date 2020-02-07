@@ -2,7 +2,19 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.rowHeight = 50
+        return tableView
+    }()
+    
+    private lazy var searchBar: UISearchBar = {
+        let search = UISearchBar()
+        search.translatesAutoresizingMaskIntoConstraints = false
+        return search
+    }()
     
     private lazy var viewModel: HomeViewModelType = {
         return HomeViewModel(service: WeatherService())
@@ -13,9 +25,26 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
      
+        buildViewHierarchy()
+        setupConstraints()
+        configureViews()
         bindViewModel()
-        
-        viewModel.searchCity.onNext("Guarulhos")
+    }
+    
+    private func buildViewHierarchy() {
+        view.addSubview(tableView)
+    }
+    
+    private func setupConstraints() {
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
+    
+    private func configureViews() {
+        title = "Weather"
+        navigationItem.titleView = searchBar
     }
     
     private func bindViewModel() {

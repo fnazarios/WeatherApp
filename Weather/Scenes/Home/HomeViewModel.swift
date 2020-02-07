@@ -26,12 +26,11 @@ final class HomeViewModel: HomeViewModelType {
             .share()
         
         city = response
-            .map { $0.name }
+            .map(\.name)
             .asDriver(onErrorJustReturn: "deu ruim")
             
         temperature = response
-            .compactMap { $0.weather.first }
-            .map { $0.main }
+            .map(\.main.temp.description)
             .asDriver(onErrorJustReturn: "deu ruim")
 
         
